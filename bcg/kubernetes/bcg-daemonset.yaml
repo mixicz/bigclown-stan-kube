@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: bigclown-gateway
+  labels:
+    k8s-app: bigclown-gateway
+spec:
+  selector:
+    matchLabels:
+      name: bigclown-gateway
+      usb: bigclown-gateway
+  template:
+    metadata:
+      labels:
+        name: bigclown-gateway
+    spec:
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      containers:
+      - name: bigclown-gateway
+        image: mixi/bcg:latest
+        resources:
+          limits:
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      terminationGracePeriodSeconds: 10
+      volumes:
+      - name: tmp
+        emptyDir: {}

@@ -8,12 +8,20 @@ spec:
   selector:
     matchLabels:
       name: bigclown-gateway
-      usb: bigclown-gateway
   template:
     metadata:
       labels:
         name: bigclown-gateway
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: usb
+                    operator: In
+                    values:
+                      - bigclown-dongle
       tolerations:
       - key: node-role.kubernetes.io/master
         effect: NoSchedule
@@ -27,9 +35,14 @@ spec:
             cpu: 100m
             memory: 200Mi
         volumeMounts:
-        - name: tmp
+        - name: vol-tmp
           mountPath: /tmp
+        - name: vol-dev-usb0
+          mountPath: /dev/ttyUSB0
       terminationGracePeriodSeconds: 10
       volumes:
-      - name: tmp
+      - name: vol-tmp
         emptyDir: {}
+      - name: vol-dev-usb0
+        hostPath:
+          path: /dev/ttyUSB0

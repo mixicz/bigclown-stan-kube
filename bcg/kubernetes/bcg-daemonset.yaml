@@ -28,17 +28,29 @@ spec:
       containers:
       - name: bigclown-gateway
         image: mixi/bcg:latest
+        imagePullPolicy: Always
+        env:
+        - name: MQTT_HOST
+          value: "mosquitto"
+        - name: MQTT_PORT
+          value: "1883"
+        - name: PARAMS
+          value: "--debug"
         resources:
           limits:
             memory: 200Mi
           requests:
             cpu: 100m
-            memory: 200Mi
+            memory: 100Mi
         volumeMounts:
         - name: vol-tmp
           mountPath: /tmp
         - name: vol-dev-usb0
           mountPath: /dev/ttyUSB0
+        #- name: vol-dev
+          #mountPath: /dev/
+        securityContext:
+          privileged: true
       terminationGracePeriodSeconds: 10
       volumes:
       - name: vol-tmp
@@ -46,3 +58,6 @@ spec:
       - name: vol-dev-usb0
         hostPath:
           path: /dev/ttyUSB0
+      #- name: vol-dev
+        #hostPath:
+          #path: /dev/

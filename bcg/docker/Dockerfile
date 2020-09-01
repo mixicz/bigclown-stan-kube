@@ -5,8 +5,8 @@ VOLUME /tmp
 VOLUME /config
 
 # Dependencies
-RUN pip3 install --upgrade --no-cache-dir bcg ; \
-    adduser --disabled-password --gecos='BigClown Gateway,,,' --uid 23912 --home /bcg bcg; chown bcg:bcg /config /tmp
+RUN pip3 install --upgrade --no-cache-dir bcg bcf bch ; \
+    adduser --disabled-password --gecos='BigClown Gateway,,,' --uid 23912 --home /bcg bcg; chown bcg:bcg /config /tmp ; adduser bcg dialout
 
 USER bcg
 WORKDIR /bcg

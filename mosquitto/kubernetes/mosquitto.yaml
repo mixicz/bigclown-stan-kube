@@ -17,7 +17,7 @@ kind: Service
 metadata:
   name: mosquitto
   labels:
-    app: mosquitto
+    app: mosquitto-svc
 spec:
   type: ClusterIP
   sessionAffinity: None
@@ -28,6 +28,23 @@ spec:
     targetPort: 1883
   selector:
     app: mosquitto
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: mosquitto-ext
+  name: mosquitto-ext
+spec:
+  externalIPs:
+  - 192.168.1.33
+  ports:
+  - port: 1883
+    protocol: TCP
+    targetPort: 1883
+  selector:
+    app: mosquitto-svc
+  type: LoadBalancer
 ---
 apiVersion: apps/v1
 kind: StatefulSet
@@ -54,21 +71,21 @@ spec:
         image: eclipse-mosquitto:1.6
         ports:
         - containerPort: 1883
+          hostPort: 1883
           protocol: TCP
         livenessProbe:
-          tcpSocket:
-            port: 1883
+          exec:
+            command: 
+            - /usr/bin/mosquitto_pub 
+            - -t 
+            - monitor/health
+            - -m 
+            - kube-livenessProbe
+          #tcpSocket:
+            #port: 1883
           failureThreshold: 2
           initialDelaySeconds: 60
-          periodSeconds: 5
-          successThreshold: 1
-          timeoutSeconds: 2
-        readinessProbe:
-          tcpSocket:
-            port: 1883
-          failureThreshold: 10
-          initialDelaySeconds: 5
-          periodSeconds: 5
+          periodSeconds: 30
           successThreshold: 1
           timeoutSeconds: 2
         resources:

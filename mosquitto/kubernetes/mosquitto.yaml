@@ -29,23 +29,23 @@ spec:
   selector:
     app: mosquitto
 ---
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: mosquitto-ext
-  name: mosquitto-ext
-spec:
-  externalIPs:
-  - 192.168.1.33
-  ports:
-  - port: 1883
-    protocol: TCP
-    targetPort: 1883
-  selector:
-    app: mosquitto-svc
-  type: LoadBalancer
----
+#apiVersion: v1
+#kind: Service
+#metadata:
+  #labels:
+    #app: mosquitto-ext
+  #name: mosquitto-ext
+#spec:
+  #externalIPs:
+  #- 192.168.1.33
+  #ports:
+  #- port: 1883
+    #protocol: TCP
+    #targetPort: 1883
+  #selector:
+    #app: mosquitto-svc
+  #type: LoadBalancer
+#---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:

@@ -1,0 +1,58 @@
+# kubernetes deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mqtt2influxdb
+  labels:
+    app: mqtt2influxdb
+spec:
+  selector:
+    matchLabels:
+      name: mqtt2influxdb
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  revisionHistoryLimit: 10
+  template:
+    metadata:
+      labels:
+        name: mqtt2influxdb
+        app: mqtt2influxdb
+    spec:
+      containers:
+      - image: mixi/mqtt2influxdb:v0.0.1-arm32
+        #imagePullPolicy: Always
+        name: mqtt2influxdb
+        #env:
+        #ports:
+        #- containerPort: 8086
+#        readinessProbe:
+#          httpGet:
+#            port: 8080
+#            path: /
+#          initialDelaySeconds: 60
+#          periodSeconds: 5
+#          timeoutSeconds: 5
+#          successThreshold: 1
+#          failureThreshold: 10
+#        livenessProbe:
+#          httpGet:
+#            port: 8080
+#            path: /
+#          initialDelaySeconds: 60
+#          periodSeconds: 60
+#          timeoutSeconds: 5
+#          successThreshold: 1
+#          failureThreshold: 3
+        #volumeMounts:
+        #- name: volume-mqtt2influxdb-data
+          #mountPath: /var/lib/mqtt2influxdb
+        resources:
+          limits:
+            memory: "200Mi"
+      imagePullSecrets:
+      - name: dockerhub
+      volumes:
+      - name: tmp
+        emptyDir: {}
+

@@ -1,0 +1,109 @@
+# kubernetes service
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  labels:
+    app: grafana
+spec:
+  ports:
+    - port: 80
+      targetPort: 3000
+      protocol: TCP
+      name: grafana
+  selector:
+    name: grafana
+
+---
+
+#kubernetes ingress
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-grafana
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: grafana.mixi.cz
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: grafana
+          servicePort: 80
+
+---
+
+# kubernetes deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  labels:
+    app: grafana
+spec:
+  selector:
+    matchLabels:
+      name: grafana
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  revisionHistoryLimit: 10
+  template:
+    metadata:
+      labels:
+        name: grafana
+        app: grafana
+    spec:
+      containers:
+      - image: grafana/grafana:latest
+        #imagePullPolicy: Always
+        name: grafana
+        env:
+        - name: GF_PATHS_LOGS
+          value: "/tmp/log"
+        ports:
+        - containerPort: 3000
+        readinessProbe:
+          httpGet:
+            port: 3000
+            path: /
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 10
+        livenessProbe:
+          httpGet:
+            port: 3000
+            path: /
+          initialDelaySeconds: 60
+          periodSeconds: 60
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: volume-grafana-data
+          mountPath: /var/lib/grafana
+        - name: volume-grafana-config
+          mountPath: /etc/grafana
+        resources:
+          limits:
+            memory: "200Mi"
+      imagePullSecrets:
+      - name: dockerhub
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: volume-grafana-data
+        nfs:
+          path: /srv/kube/grafana
+          server: cindy
+      - name: volume-grafana-config
+        nfs:
+          path: /srv/kube/grafana-config
+          server: cindy
+

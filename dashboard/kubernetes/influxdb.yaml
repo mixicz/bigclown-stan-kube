@@ -10,11 +10,11 @@ spec:
     - port: 8086
       targetPort: 8086
       protocol: TCP
-      name: influxdb-grafana
+      name: influxdb-grafana-http
     - port: 8096
       targetPort: 8096
       protocol: TCP
-      name: influxdb-grafana
+      name: influxdb-grafana-rpc
   selector:
     name: influxdb-grafana
 
@@ -75,11 +75,13 @@ spec:
           value: "/config/types.db"
         ports:
         - containerPort: 8086
+          #name: influxdb-grafana-http
         - containerPort: 8096
-       readinessProbe:
+          #name: influxdb-grafana-rpc
+        readinessProbe:
           httpGet:
             port: 8086
-             path: /health
+            path: /health
           initialDelaySeconds: 5
           periodSeconds: 5
           timeoutSeconds: 5

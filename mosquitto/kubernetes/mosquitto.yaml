@@ -103,8 +103,8 @@ spec:
       - name: volume-mosquitto-data
         nfs:
           path: /srv/kube/mosquitto/data
-          server: cindy
+          server: mifs01
       - name: volume-mosquitto-log
         nfs:
           path: /srv/kube/mosquitto/log
-          server: cindy
+          server: mifs01

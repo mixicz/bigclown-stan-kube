@@ -101,9 +101,9 @@ spec:
       - name: volume-grafana-data
         nfs:
           path: /srv/kube/grafana
-          server: cindy
+          server: mifs01
       - name: volume-grafana-config
         nfs:
           path: /srv/kube/grafana-config
-          server: cindy
+          server: mifs01
 

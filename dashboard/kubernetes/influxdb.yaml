@@ -112,7 +112,7 @@ spec:
       - name: volume-influxdb-grafana-data
         nfs:
           path: /srv/kube/influxdb-grafana
-          server: cindy
+          server: mifs01
       - name: volume-config-extra
         configMap:
           name: influxdb-grafana-conf

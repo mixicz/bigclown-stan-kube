@@ -1,5 +1,6 @@
 mqtt:
-  host: mosquitto
+  # host: mosquitto
+  host: nats
   port: 1883
 
 influxdb:

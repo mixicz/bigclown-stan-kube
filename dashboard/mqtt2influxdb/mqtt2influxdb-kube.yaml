@@ -19,6 +19,8 @@ spec:
         name: mqtt2influxdb
         app: mqtt2influxdb
     spec:
+      nodeSelector:
+        workload_generic: "1"
       containers:
       - image: mixi/mqtt2influxdb:v0.0.1-arm32
         #imagePullPolicy: Always
@@ -44,15 +46,92 @@ spec:
 #          timeoutSeconds: 5
 #          successThreshold: 1
 #          failureThreshold: 3
-        #volumeMounts:
-        #- name: volume-mqtt2influxdb-data
-          #mountPath: /var/lib/mqtt2influxdb
+        volumeMounts:
+        - name: volume-config
+          mountPath: /etc/hardwario/
         resources:
           limits:
             memory: "200Mi"
+            cpu: "1"
       imagePullSecrets:
       - name: dockerhub
       volumes:
       - name: tmp
         emptyDir: {}
+      - name: volume-config
+        configMap:
+          name: mqtt2influxdb-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mqtt2influxdb-config
+data:
+  mqtt2influxdb.yml: |
+    mqtt:
+      host: nats
+      port: 1883
 
+    influxdb:
+      host: influxdb-grafana
+      port: 8086
+      database: node
+
+    points:
+      - measurement: temperature
+        topic: node/+/thermometer/+/temperature
+        fields:
+          value: $.payload
+        tags:
+          id: $.topic[1]
+          channel: $.topic[3]
+
+      - measurement: relative-humidity
+        topic: node/+/hygrometer/0:4/relative-humidity
+        fields:
+          value: $.payload
+        tags:
+          id: $.topic[1]
+
+      - measurement: illuminance
+        topic: node/+/lux-meter/0:0/illuminance
+        fields:
+          value: $.payload
+        tags:
+          id: $.topic[1]
+
+      - measurement: pressure
+        topic: node/+/barometer/0:0/pressure
+        fields:
+          value: $.payload
+        tags:
+          id: $.topic[1]
+
+      - measurement: co2
+        topic: node/+/co2-meter/-/concentration
+        fields:
+          value: $.payload
+        tags:
+          id: $.topic[1]
+
+      - measurement: voltage
+        topic: node/+/battery/+/voltage
+        fields:
+          value: $.payload
+        tags:
+          id: $.topic[1]
+
+      - measurement: fan-speed
+        topic: node/+/fan/+/speed
+        fields:
+          value: $.payload
+        tags:
+          id: $.topic[1]
+
+      #- measurement: button
+        #topic: node/+/push-button/+/event-count
+        #fields:
+          #value: $.payload
+        #tags:
+          #id: $.topic[1]
+          #channel: $.topic[3]

@@ -21,7 +21,7 @@ spec:
 ---
 
 # kubernetes ingress
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: ingress-influxdb-grafana
@@ -33,9 +33,12 @@ spec:
     http:
       paths:
       - path: /
+        pathType: Prefix
         backend:
-          serviceName: influxdb-grafana
-          servicePort: 8086
+          service:
+            name: influxdb-grafana
+            port: 
+              number: 8086
 
 ---
 
@@ -60,6 +63,8 @@ spec:
         name: influxdb-grafana
         app: influxdb-grafana
     spec:
+      nodeSelector:
+        workload_generic: "1"
       containers:
       - image: arm32v7/influxdb:latest
         #imagePullPolicy: Always

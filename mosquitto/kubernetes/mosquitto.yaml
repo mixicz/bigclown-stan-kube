@@ -15,7 +15,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mosquitto
+  name: mosquitto-old
   labels:
     app: mosquitto-svc
 spec:
@@ -63,6 +63,8 @@ spec:
       labels:
         app: mosquitto
     spec:
+      nodeSelector:
+        workload_generic: "1"
       containers:
       - name: mosquitto
         env:

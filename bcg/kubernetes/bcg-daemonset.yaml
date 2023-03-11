@@ -31,7 +31,7 @@ spec:
         imagePullPolicy: Always
         env:
         - name: MQTT_HOST
-          value: "mosquitto"
+          value: "nats"
         - name: MQTT_PORT
           value: "1883"
         - name: PARAMS

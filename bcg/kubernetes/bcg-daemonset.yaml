@@ -43,8 +43,8 @@ spec:
             cpu: 100m
             memory: 100Mi
         volumeMounts:
-        - name: vol-tmp
-          mountPath: /tmp
+        # - name: vol-tmp
+        #   mountPath: /tmp
         - name: vol-dev-usb0
           mountPath: /dev/ttyUSB0
         #- name: vol-dev
@@ -53,8 +53,8 @@ spec:
           privileged: true
       terminationGracePeriodSeconds: 10
       volumes:
-      - name: vol-tmp
-        emptyDir: {}
+      # - name: vol-tmp
+      #   emptyDir: {}
       - name: vol-dev-usb0
         hostPath:
           path: /dev/ttyUSB0

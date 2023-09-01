@@ -55,7 +55,7 @@ spec:
       name: influxdb-grafana
   replicas: 1
   strategy:
-    type: RollingUpdate
+    type: Recreate
   revisionHistoryLimit: 10
   template:
     metadata:
@@ -96,7 +96,7 @@ spec:
           httpGet:
             port: 8086
             path: /health
-          initialDelaySeconds: 60
+          initialDelaySeconds: 612
           periodSeconds: 60
           timeoutSeconds: 5
           successThreshold: 1
@@ -108,7 +108,7 @@ spec:
           mountPath: /config
         resources:
           limits:
-            memory: "200Mi"
+            memory: "400Mi"
       imagePullSecrets:
       - name: dockerhub
       volumes:

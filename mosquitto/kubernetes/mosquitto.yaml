@@ -73,7 +73,7 @@ spec:
         image: eclipse-mosquitto:1.6
         ports:
         - containerPort: 1883
-          hostPort: 1883
+          # hostPort: 1883
           protocol: TCP
         livenessProbe:
           exec:

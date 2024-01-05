@@ -50,6 +50,9 @@ spec:
         - name: volume-config
           mountPath: /etc/hardwario/
         resources:
+          requests:
+            memory: "10Mi"
+            cpu: "10m"
           limits:
             memory: "200Mi"
             cpu: "1"
@@ -69,7 +72,7 @@ metadata:
 data:
   mqtt2influxdb.yml: |
     mqtt:
-      host: nats
+      host: mosquitto-old
       port: 1883
 
     influxdb:

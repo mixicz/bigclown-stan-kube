@@ -103,10 +103,14 @@ spec:
       dnsPolicy: ClusterFirst
       volumes:
       - name: volume-mosquitto-data
-        nfs:
-          path: /srv/kube/mosquitto/data
-          server: mifs01
+        emptyDir: {}
       - name: volume-mosquitto-log
-        nfs:
-          path: /srv/kube/mosquitto/log
-          server: mifs01
+        emptyDir: {}
+      # - name: volume-mosquitto-data
+      #   nfs:
+      #     path: /srv/kube/mosquitto/data
+      #     server: mifs01
+      # - name: volume-mosquitto-log
+      #   nfs:
+      #     path: /srv/kube/mosquitto/log
+      #     server: mifs01

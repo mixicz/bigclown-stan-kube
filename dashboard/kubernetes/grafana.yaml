@@ -98,6 +98,7 @@ spec:
         resources:
           limits:
             memory: "200Mi"
+            cpu: "1"
       imagePullSecrets:
       - name: dockerhub
       volumes:
@@ -106,9 +107,11 @@ spec:
       - name: volume-grafana-data
         nfs:
           path: /srv/kube/grafana
+          # server: cindy
           server: mifs01
       - name: volume-grafana-config
         nfs:
           path: /srv/kube/grafana-config
+          # server: cindy
           server: mifs01
 

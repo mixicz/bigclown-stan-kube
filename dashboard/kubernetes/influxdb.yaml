@@ -1,3 +1,16 @@
+# kubernetes PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: influxdb-grafana-data
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: longhorn-pikube
+  resources:
+    requests:
+      storage: 5Gi
+---
 # kubernetes service
 apiVersion: v1
 kind: Service
@@ -64,7 +77,7 @@ spec:
         app: influxdb-grafana
     spec:
       nodeSelector:
-        workload_generic: "1"
+        workload_storage: nvme
       containers:
       - image: arm32v7/influxdb:latest
         #imagePullPolicy: Always
@@ -109,15 +122,18 @@ spec:
         resources:
           limits:
             memory: "400Mi"
+            cpu: "1"
       imagePullSecrets:
       - name: dockerhub
       volumes:
       - name: tmp
         emptyDir: {}
       - name: volume-influxdb-grafana-data
-        nfs:
-          path: /srv/kube/influxdb-grafana
-          server: mifs01
+        # nfs:
+        #   path: /srv/kube/influxdb-grafana
+        #   server: mifs01
+        persistentVolumeClaim:
+          claimName: influxdb-grafana-data
       - name: volume-config-extra
         configMap:
           name: influxdb-grafana-conf

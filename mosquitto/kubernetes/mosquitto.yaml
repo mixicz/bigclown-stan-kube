@@ -15,7 +15,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: mosquitto-old
+  name: mosquitto
   labels:
     app: mosquitto-svc
 spec:

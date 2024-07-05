@@ -297,5 +297,4 @@ metadata:
     manager: kubectl
     operation: Update
     time: "2020-10-09T13:55:33Z"
-  name: influxdb-conf
-  selfLink: /api/v1/namespaces/default/configmaps/influxdb-conf
+  name: influxdb-grafana-conf

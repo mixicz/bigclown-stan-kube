@@ -25,7 +25,9 @@ spec:
       - image: mixi/mqtt2influxdb:v0.0.1-arm32
         #imagePullPolicy: Always
         name: mqtt2influxdb
-        #env:
+        env:
+        - name: CONFIG_UPDATE
+          value: "1"
         #ports:
         #- containerPort: 8086
 #        readinessProbe:
@@ -72,7 +74,7 @@ metadata:
 data:
   mqtt2influxdb.yml: |
     mqtt:
-      host: mosquitto-old
+      host: nats
       port: 1883
 
     influxdb:

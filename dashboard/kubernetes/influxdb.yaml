@@ -9,7 +9,7 @@ spec:
   storageClassName: longhorn-pikube
   resources:
     requests:
-      storage: 5Gi
+      storage: 10Gi
 ---
 # kubernetes service
 apiVersion: v1
@@ -120,6 +120,9 @@ spec:
         - name: volume-config-extra
           mountPath: /config
         resources:
+          requests:
+            memory: "300Mi"
+            cpu: "1m"
           limits:
             memory: "400Mi"
             cpu: "1"

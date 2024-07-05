@@ -96,8 +96,11 @@ spec:
         - name: volume-grafana-config
           mountPath: /etc/grafana
         resources:
-          limits:
+          requests:
             memory: "200Mi"
+            cpu: "1m"
+          limits:
+            memory: "300Mi"
             cpu: "1"
       imagePullSecrets:
       - name: dockerhub
@@ -114,4 +117,3 @@ spec:
           path: /srv/kube/grafana-config
           # server: cindy
           server: mifs01
-

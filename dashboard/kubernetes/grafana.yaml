@@ -22,7 +22,8 @@ kind: Ingress
 metadata:
   name: ingress-grafana
   annotations:
-    kubernetes.io/ingress.class: traefik
+    spec.ingressClassName: traefik
+    traefik.ingress.kubernetes.io/router.tls.certresolver: active24resolver
 spec:
   rules:
   - host: grafana.mixi.cz
@@ -35,6 +36,9 @@ spec:
             name: grafana
             port: 
               number: 80
+  tls:
+    - hosts:
+        - grafana.mixi.cz
 
 ---
 
@@ -111,9 +115,9 @@ spec:
         nfs:
           path: /srv/kube/grafana
           # server: cindy
-          server: mifs01
+          server: mifs01.intranet
       - name: volume-grafana-config
         nfs:
           path: /srv/kube/grafana-config
           # server: cindy
-          server: mifs01
+          server: mifs01.intranet
